@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>io.github.ehlxr</groupId>
+  <artifactId>did-parent</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.2-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20210122082959</lastUpdated>
+  </versioning>
+</metadata>
