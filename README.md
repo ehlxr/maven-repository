@@ -16,6 +16,7 @@
 <repositories>
     <repository>
         <id>github</id>
+        <!--<url>https://git.ehlxr.me/ehlxr/maven-repository/raw/branch/main</url>-->
         <url>https://raw.github.com/ehlxr/maven-repository/main/</url>
     </repository>
 </repositories>
