@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.ehlxr</groupId>
+    <artifactId>did-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.1.1-SNAPSHOT</version>
+    <modules>
+        <module>did-server</module>
+        <module>did-sdk</module>
+        <module>did-common</module>
+        <module>did-core</module>
+    </modules>
+
+    <name>did-parent</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--目标编译的 Java 版本可以通过以下属性指定，不用配置 maven-compiler-plugin 插件-->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <did.version>1.1.1-SNAPSHOT</did.version>
+
+        <netty.version>4.1.58.Final</netty.version>
+        <logback.version>1.1.7</logback.version>
+        <junit.version>4.13.1</junit.version>
+        <jackson.version>2.10.3</jackson.version>
+        <protostuff.version>1.7.2</protostuff.version>
+        <hessian.version>4.0.65</hessian.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.ehlxr</groupId>
+                <artifactId>did-common</artifactId>
+                <version>${did.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.ehlxr</groupId>
+                <artifactId>did-core</artifactId>
+                <version>${did.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--<dependencies>-->
+    <!-- 为了 debug 调试-->
+    <!--    <dependency>-->
+    <!--        <groupId>com.github.github</groupId>-->
+    <!--        <artifactId>site-maven-plugin</artifactId>-->
+    <!--        <version>0.12</version>-->
+    <!--    </dependency>-->
+    <!--</dependencies>-->
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                    <configuration>
+                        <altDeploymentRepository>maven.repo::default::file://${project.build.directory}/mvn-repo
+                        </altDeploymentRepository>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.4</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <!-- Deploy the web site -->
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.12</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <!-- select the Maven phase in which the plugin will be executed -->
+                            <phase>deploy</phase>
+                            <configuration>
+                                <!-- Plugin configuration goes here -->
+                                <userName>ehlxr</userName>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <password>${env.GITHUB_MVN_TOKEN}</password>
+                                <!-- The commit message -->
+                                <message>init git maven repository</message>
+                                <!-- The location where the site is uploaded -->
+                                <repositoryName>maven-repository</repositoryName> <!-- github repo name -->
+                                <repositoryOwner>ehlxr</repositoryOwner> <!-- organization or user name  -->
+                                <!-- Use merge or override the content -->
+                                <merge>true</merge>
+                                <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+                                <branch>refs/heads/main</branch>
+                                <!--<includes>-->
+                                <!--    <include>**/*</include>-->
+                                <!--</includes>-->
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>maven.repo</id>
+            <name>Local Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
+
+    <!--<distributionManagement>-->
+    <!--    <repository>-->
+    <!--        <id>github</id>-->
+    <!--        <name>GitHub Apache Maven Packages</name>-->
+    <!--        <url>https://maven.pkg.github.com/ehlxr/mvn-repository</url>-->
+    <!--    </repository>-->
+    <!--</distributionManagement>-->
+
+</project>
