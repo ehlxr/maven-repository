@@ -7,7 +7,7 @@
     <dependency>
       <groupId>io.github.ehlxr</groupId>
       <artifactId>did-sdk</artifactId>
-      <version>1.0.2-SNAPSHOT</version>
+      <version>1.1.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
