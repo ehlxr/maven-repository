@@ -4,8 +4,8 @@
   <artifactId>did-core</artifactId>
   <versioning>
     <versions>
-      <version>1.1.0-SNAPSHOT</version>
+      <version>1.1.1-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20210213030044</lastUpdated>
+    <lastUpdated>20210213043653</lastUpdated>
   </versioning>
 </metadata>
